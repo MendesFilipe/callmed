@@ -4,7 +4,7 @@ var chalkLog = require("chalk-log");
 
 const router = express.Router();
 
-router.post("/room", async (req, res) => {
+router.get("/room", async (req, res) => {
   const id = await token(12);
   //todo: validate that there are no rooms with this name
 
@@ -29,7 +29,8 @@ module.exports = function (io) {
       log("join", room);
 
       var clients = io.nsps[NAMESPACE].adapter.rooms[room];
-      var numberOfRoomMembers = typeof clients !== "undefined" ? clients.length : 0;
+      var numberOfRoomMembers =
+        typeof clients !== "undefined" ? clients.length : 0;
 
       log(`Number of members: ${numberOfRoomMembers}`, room);
 
