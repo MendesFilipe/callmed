@@ -11,7 +11,7 @@ const configuration = {
 
 export const createRoom = async () => {
   try {
-    const room = await axios.post("/chat/room");
+    const room = await axios.get("/chat/room");
     return { success: true, id: room.data.id };
   } catch (error) {
     return { success: false, error: error };
@@ -38,7 +38,10 @@ const waitConnection = async (room, localStream, remoteStream, socket) => {
           return;
         }
         //console.log("Got candidate: ", event.candidate);
-        socket.emit("icecandidate", { room, candidate: event.candidate.toJSON() });
+        socket.emit("icecandidate", {
+          room,
+          candidate: event.candidate.toJSON(),
+        });
       });
 
       socket.on("icecandidate", (candidate) => {
@@ -75,11 +78,22 @@ const createOffer = async (room, peerConnection, socket) => {
   socket.emit("offer", { room, offer: roomWithOffer });
 };
 
-export const startCall = async (chatId, localStream, remoteStream, socket, events) => {
+export const startCall = async (
+  chatId,
+  localStream,
+  remoteStream,
+  socket,
+  events
+) => {
   const room = chatId;
   socket.emit("join", room);
 
-  const { status, isCaller, peerConnection } = await waitConnection(room, localStream, remoteStream, socket);
+  const { status, isCaller, peerConnection } = await waitConnection(
+    room,
+    localStream,
+    remoteStream,
+    socket
+  );
 
   if (status === "full") {
     return { success: false, error: "full" };
@@ -118,7 +132,9 @@ export const endCall = (chatId, socket) => {
 export const toggleMute = (peerConnection) => {
   if (peerConnection === null) return false;
 
-  let { track } = peerConnection.getSenders().find((c) => c.track.kind === "audio");
+  let { track } = peerConnection
+    .getSenders()
+    .find((c) => c.track.kind === "audio");
 
   console.log(track);
   if (track) {
