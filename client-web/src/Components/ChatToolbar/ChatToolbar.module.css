@@ -1,0 +1,38 @@
+.toolbar {
+  z-index: 200;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  border-radius: 10px;
+  background: #30333a;
+}
+
+.button {
+  z-index: 200;
+  padding: 10px;
+  position: relative;
+  color: gray;
+}
+
+.title {
+  position: absolute;
+  right: 55px;
+  white-space: nowrap;
+  top: 0px;
+  color: #fff;
+  display: none;
+  transform: translateY(50%);
+}
+
+.button:hover {
+  color: #fff;
+}
+
+.button:hover .title {
+  display: block;
+}
